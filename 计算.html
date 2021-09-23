@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>购物车页面</title>
+    <link type="text/css" rel="stylesheet" href="css/cartStyle.css" />
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<body>
+
+    <!-- <div class="content"> -->
+        <table id="cartTable">
+        <!-- <div class="logo">
+            <img src="images/dd_logo.jpg"><span onclick="close_plan();">关闭</span>
+        </div> -->
+        <div class="cartList" id="cartList">
+            <ul>
+                <li>商品图片</li>
+                <li>商品信息</li>
+                <li>单价</li>
+                <li>数量</li>
+                <li>总价</li>
+                <li>操作</li>
+            </ul>
+            <ul>
+                <li><img src="./images/1-1.png"></li>
+                <li> 竹迪&nbsp;&nbsp;客厅装饰画现代简约晶瓷画沙发背景墙挂画三联画餐厅墙画<br />靠山书房壁画抽象艺术画 11时来运转8190</li>
+                <li>¥<input type="text" name="price" value="21.90"></li>
+                <li>
+                    <input type="button" name="minus" value="-" onclick="minus(0);">
+                    <input type="text" name="amount" value="1">
+                    <input type="button" name="plus" value="+" onclick="plus(0);">
+                </li>
+                <li id="price0">¥21.90</li>
+                <li>
+                    <p onclick="collection();">移入收藏</p>
+                    <p onclick="del(0);">删除</p>
+                </li>
+            </ul>
+            <ul>
+                <li><img src="images/mai.jpg"></li>
+                <li>灰霾来了怎么办</li>
+                <li>¥<input type="text" name="price" value="24.00"></li>
+                <li><input type="button" name="minus" value="-" onclick="minus(1);"><input type="text" name="amount"
+                        value="1"><input type="button" name="plus" value="+" onclick="plus(1);"></li>
+                <li id="price1">¥24.00</li>
+                <li>
+                    <p onclick="collection();">移入收藏</p>
+                    <p onclick="del(1);">删除</p>
+                </li>
+            </ul>
+            <ol>
+                <li id="totalPrice">商品总计：<span></span></li>
+                <li><span onclick="accounts();">结 算</span></li>
+            </ol>
+        </div>
+        <div style="display:none;"></div>
+    <!-- </div> --> </table>
+    <script>
+    // 减
+        function minus(num) {
+            var prices = document.getElementsByName("price")[num].value;
+            var count = parseInt(document.getElementsByName("amount")[num].value) - 1;
+            if (count < 1) {
+                alert("不能再减了，再减就没有啦！");
+            }
+            else {
+                document.getElementsByName("amount")[num].value = count;
+                var totals = parseFloat(prices * count);
+                document.getElementById("price" + num).innerHTML = "¥" + totals.toFixed(2);//.toFixed(2)表示四舍五入，取2位小数点
+                total();
+            }
+        }
+        //增
+        function plus(num) {
+            var prices = document.getElementsByName("price")[num].value;
+            var count = parseInt(document.getElementsByName("amount")[num].value) + 1;
+            document.getElementsByName("amount")[num].value = count;
+            var totals = parseFloat(prices * count);
+            document.getElementById("price" + num).innerHTML = "¥" + totals.toFixed(2);
+            total();
+        }
+        //计算总额
+        function total() {
+            var prices = document.getElementsByName("price");
+            var count = document.getElementsByName("amount");
+            var sum = 0;
+            for (var i = 0; i < prices.length; i++) {
+                sum += prices[i].value * count[i].value;
+            }
+            document.getElementById("totalPrice").getElementsByTagName("span")[0].innerHTML = "¥" + sum.toFixed(2);
+        }
+        //结算
+        function accounts() {
+            var obj = document.getElementById("cartList").nextElementSibling;//.nextElementSibling表示下一个同辈元素
+            obj.style.display = "block";
+            var str = "您本次购买的商品信息好下：";
+            str += "<br/>白岩松：白说：" + document.getElementById("price0").innerHTML;
+            str += "<br/>岛上书店：" + document.getElementById("price1").innerHTML;
+            str += "<br/>商品总计：" + document.getElementById("totalPrice").innerHTML;
+            obj.innerHTML = str;
+        }
+        //删除
+        function del(num) {
+            var ocartList = document.getElementById("cartList");
+            var delObj = document.getElementsByName("price")[num].parentNode.parentNode;
+            ocartList.removeChild(delObj);
+            total();
+        } 
+    </script>
+</body>

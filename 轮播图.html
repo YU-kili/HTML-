@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <!-- 引入css文件 -->
+    <link rel="stylesheet" href="./css/swiper-bundle.min.css">
+    <style>
+        /* 最外层盒子 */
+        .swiper-container {
+            width:80%;
+            height: 320px;
+            margin-top: 130px;
+        }
+
+        /* 图片 */
+        .swiper-container img {
+            display: block;
+            height: 287px;
+            /* width: 100%; */
+            overflow: hidden;
+        }
+
+        /* 左右按钮 */
+        .swiper-container .swiper-button-prev,
+        .swiper-container .swiper-button-next {
+            height: 24px;
+            margin: auto;
+        }
+
+        /* 改变左右箭头、分页器的样式 */
+        .swiper-container {
+            /* 左右箭头按钮 */
+            --swiper-theme-color: #ff6600;
+            /* 分页器 */
+            /* --swiper-pagination-color: #00ff33; */
+        }
+
+        /* 单独修改分页器的css样式，swiper默认是10*10的span */
+        .swiper-container .swiper-pagination span {
+            width: 16px;
+            height: 16px;
+            --swiper-pagination-color: red;
+        }
+
+        /* 移动鼠标，隐藏显示左右按钮，配合js使用 */
+        .swiper-container .hide {
+            opacity: 0;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- html内容按照要求和需求，无需此处加入猫腻图 -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="./images/1.png"></div>
+            <div class="swiper-slide"><img src="./images/2.png"></div>
+            <div class="swiper-slide"><img src="./images/3.png"></div>
+            <div class="swiper-slide"><img src="./images/4.png"></div>
+            <div class="swiper-slide"><img src="./images/1-1.png"></div>
+            <div class="swiper-slide"><img src="./images/1.png"></div>
+            <div class="swiper-slide"><img src="./images/1-4.png"></div>
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
+
+        <!-- 如果需要导航按钮 -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+
+    </div>
+    <!-- 此处，引入js文件 -->
+    <script src="./js/swiper-bundle.min.js"></script>
+    <script>
+        // new Swiper函数，第一个参数为挂载元素（可以使用自定义class和id），第二个参数为指定的功能函数
+        var mySwiper = new Swiper('.swiper-container', {
+            // direction: 'vertical', // 垂直切换选项
+
+            loop: true, // 循环模式选项，相当于切换到最后一张图片时，加上一张猫腻图，不加上，会出现直接从最后一张拉拽到第一张
+            slidesPerView: 5,//显示数量
+            spaceBetween: 25,//图片间距
+            // 自由切换
+            autoplay: {
+
+                delay: 3000,//自动切换时间
+                stopOnLastSlide: true,//与loop有关，设置为true，loop失效
+                disableOnInteraction: true,//用户操作之后，是否禁止自动切换（默认true禁止/设置false允许）
+            },
+            // 如果需要分页器
+            pagination: {
+                el: '.swiper-pagination',//挂载的元素
+                clickable: true,//点击分页器某个点，跳转到该点击的页面
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+                nextEl: '.swiper-button-next',//左按钮
+                prevEl: '.swiper-button-prev',//右按钮
+            },
+            //鼠标移入从 箭头 变 小手
+            grabCursor: true,
+        })
+
+        // 鼠标移入轮播图范围，执行的函数
+        mySwiper.el.onmouseover = function () {
+            //鼠标进入，停止自动切换
+            mySwiper.autoplay.stop();
+
+            // 鼠标移入，显示左右按钮，配合样式使用
+            mySwiper.navigation.$nextEl.removeClass('hide');
+            mySwiper.navigation.$prevEl.removeClass('hide');
+        }
+
+        // 鼠标移出轮播图范围，执行的函数
+        mySwiper.el.onmouseout = function () {
+            //鼠标移出，开始自动切换    
+            mySwiper.autoplay.start();
+
+            // 鼠标移出，显示左右按钮，配合样式使用
+            mySwiper.navigation.$nextEl.addClass('hide');
+            mySwiper.navigation.$prevEl.addClass('hide');
+        }     
+    </script>
+</body>
+
+</html>

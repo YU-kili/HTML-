@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>完善当当购物车页面</title>
+    <link type="text/css" rel="stylesheet" href="css/cartStyle.css" />
+</head>
+<body><style>
+    body,ul,li,div,p,h1,h2,ol{margin: 0;padding: 0;}
+ul,li,ol{list-style: none;}
+.content{width: 810px; margin: 0 auto;  font-family: "微软雅黑";}
+.logo{margin: 10px 0;}
+.logo span{
+    display: inline-block;
+    float: right;
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    background: #ff0000;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.cartList{
+    background: url("../images/shoppingBg.jpg") no-repeat;
+    height: 414px;
+    overflow: hidden;
+}
+.cartList ul{
+    float: right;
+    width: 450px;
+}
+.cartList ul:nth-of-type(1){
+    margin-top: 125px;
+}
+.cartList ul:nth-of-type(2){
+    margin-top:70px;
+}
+.cartList ul li{
+    font-family: "微软雅黑";
+    font-size: 12px;
+    color: #666666;
+    text-align: center;
+    line-height: 25px;
+    float: left;
+}
+.cartList ul li input[name="price"]{
+    border: none;
+    background: transparent;
+    width: 45px;
+    text-align: center;
+}
+.cartList ul li input[name="amount"]{
+    width: 45px;
+    text-align: center;
+    border: 1px solid #999999;
+    border-left: none;
+    border-right: none;
+    height: 21px;
+}
+.cartList ul li input[name="minus"],.cartList ul li input[name="plus"]{
+    height: 25px;
+    border: 1px #999999 solid;
+    width: 25px;
+    text-align: center;
+}
+.cartList ul li:nth-of-type(1){width: 130px;}
+.cartList ul li:nth-of-type(2){width: 100px;}
+.cartList ul li:nth-of-type(3){width: 130px;}
+.cartList ul li p{cursor: pointer;}
+.cartList ol{
+    float: right;
+    clear: both;
+    margin-top: 60px;
+}
+.cartList ol li{
+    float: left;
+}
+.cartList ol li:nth-of-type(1){
+    color: #ff0000;
+    width: 120px;
+}
+.cartList ol li span{display: inline-block;
+    float: right;
+    width: 80px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    font-family: "微软雅黑";
+    background: #ff0000;
+    color: #ffffff;
+    text-align: center;
+    margin-top: 5px;
+    margin-right: 15px;
+    cursor: pointer;
+    font-weight: bold;}
+
+</style>
+
+<div class="content">
+    <div class="logo" >
+        <img src="images/dd_logo.jpg"><span id="close">关闭</span>
+    </div>
+    <div class="cartList">
+        <ul>
+            <li>¥<input type="text" name="price" value="21.90"></li>
+            <li><input type="button" name="minus" value="-"><input type="text" name="amount" value="1"><input type="button" name="plus" value="+"></li>
+            <li id="price0">¥21.90</li>
+            <li><p>移入收藏</p><p>删除</p></li>
+        </ul>
+        <ul>
+            <li>¥<input type="text" name="price" value="24.00"></li>
+            <li><input type="button" name="minus" value="-"><input type="text" name="amount" value="1"><input type="button" name="plus" value="+"></li>
+            <li id="price1">¥24.00</li>
+            <li><p>移入收藏</p><p>删除</p></li>
+        </ul>
+        <ol>
+            <li id="totalPrice">&nbsp;</li>
+            <li><span onclick="account()">结 算</span></li>
+        </ol>
+    </div>
+</div>
+<script >
+    //关闭
+document.getElementById("close").onclick = function() {
+	if(confirm("是否确认关闭")){
+		window.close();
+	}
+}
+//得到减号
+var minus = document.getElementsByName("minus");
+//得到加号
+var plus = document.getElementsByName("plus");
+//得到数量值
+var amount = document.getElementsByName("amount");
+//获取金额
+var price = document.getElementsByName("price");
+
+//一开始载入页面时显示的总金额
+var s = 0;
+for(let i = 0; i < amount.length; i++) {
+	s += Math.round(price[i].value * amount[i].value * 100) / 100;
+}
+document.getElementById("totalPrice").innerHTML = s;
+
+//当点击加号时
+function plusa(index) {
+	//得到商品数量 数量之加一
+	amount[index].value = parseInt(amount[index].value) + 1;
+	//重新计算金额数
+	document.getElementById("price" + index).innerHTML = "¥" + Math.round(price[index].value * amount[index].value * 100) / 100;
+	total();
+}
+//当点击减号时
+function minusa(index) {
+	if(amount[index].value == 1) {
+		alert("不能再减了~~");
+		return;
+	}
+	amount[index].value = parseInt(amount[index].value) - 1;
+	document.getElementById("price" + index).innerHTML = "¥" + Math.round(price[index].value * amount[index].value * 100) / 100;
+	total();
+}
+//计算总额
+function total() {
+	let sum = 0;
+	for(let i = 0; i < amount.length; i++) {
+		sum += Math.round(price[i].value * amount[i].value * 100) / 100;
+	}
+	document.getElementById("totalPrice").innerHTML = sum;
+	return sum;
+}
+
+//对第一个加号进行操作
+plus[0].onclick = function() {
+	plusa(0);
+}
+minus[0].onclick = function() {
+	minusa(0);
+}
+//对第二个加号进行操作
+plus[1].onclick = function() {
+	plusa(1);
+}
+minus[1].onclick = function() {
+	minusa(1);
+}
+
+//一共有多少数量
+function amounts(){
+	var shu = 0;
+	for (let i=0; i<amount.length; i++) {
+		shu += parseInt(amount[i].value);
+	}
+	return shu;
+}
+
+//点击结算
+function account(){
+	confirm("您本次购买的商品信息如下: \n\n"
+		+ "商品名称: 白岩松:白说、岛上书店; \n"
+		+ "商品数量: "+ amounts() +"件; \n"
+		+ "商品总计: "+ total() +"; \n"
+		+ "运费: 0元; \n\n"
+		+ "请确认以上信息是否有误!!!"
+		);
+}
+//减
+function minus(num) {
+            var prices = document.getElementsByName("price")[num].value;
+            var count = parseInt(document.getElementsByName("amount")[num].value) - 1;
+            if (count < 1) {
+                alert("不能再减了，再减就没有啦！");
+            }
+            else {
+                document.getElementsByName("amount")[num].value = count;
+                var totals = parseFloat(prices * count);
+                document.getElementById("price" + num).innerHTML = "¥" + totals.toFixed(2);//.toFixed(2)表示四舍五入，取2位小数点
+                total();
+            }
+        }
+        //增
+        function plus(num) {
+            var prices = document.getElementsByName("price")[num].value;
+            var count = parseInt(document.getElementsByName("amount")[num].value) + 1;
+            document.getElementsByName("amount")[num].value = count;
+            var totals = parseFloat(prices * count);
+            document.getElementById("price" + num).innerHTML = "¥" + totals.toFixed(2);
+            total();
+        }
+        //计算总额
+        function total() {
+            var prices = document.getElementsByName("price");
+            var count = document.getElementsByName("amount");
+            var sum = 0;
+            for (var i = 0; i < prices.length; i++) {
+                sum += prices[i].value * count[i].value;
+            }
+            document.getElementById("totalPrice").getElementsByTagName("span")[0].innerHTML = "¥" + sum.toFixed(2);
+        }
+        //结算
+        function accounts() {
+            var obj = document.getElementById("cartList").nextElementSibling;//.nextElementSibling表示下一个同辈元素
+            obj.style.display = "block";
+            var str = "您本次购买的商品信息好下：";
+            str += "<br/>白岩松：白说：" + document.getElementById("price0").innerHTML;
+            str += "<br/>岛上书店：" + document.getElementById("price1").innerHTML;
+            str += "<br/>商品总计：" + document.getElementById("totalPrice").innerHTML;
+            obj.innerHTML = str;
+        }
+        //删除
+        function del(num) {
+            var ocartList = document.getElementById("cartList");
+            var delObj = document.getElementsByName("price")[num].parentNode.parentNode;
+            ocartList.removeChild(delObj);
+            total();
+        } 
+</script>
+</body>
+</html>
